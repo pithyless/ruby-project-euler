@@ -15,10 +15,8 @@ def factorize(orig)
     sqi += 2 * i + 1
     i += 1
   end
+  factors[n] += 1 if n > 1 and n < orig
 
-  if (n != 1) && (n != orig)
-    factors[n] += 1
-  end
   factors  
 end
 
