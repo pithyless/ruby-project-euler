@@ -1,3 +1,4 @@
+require 'prime'
 
 class String
   def palindrome?
@@ -19,17 +20,15 @@ class Integer
   def pandigital?(n = 9)
     self.digits.sort ==  (1..n).to_a
   end
-  
-  # def mygcd(other)
-  #   min = self.abs
-  #   max = other.abs
-  #   while min > 0
-  #     tmp = min
-  #     min = max % min
-  #     max = tmp
-  #   end
-  #   max
-  # end
+
+  def divisors
+    primes, powers = self.prime_division.transpose
+    exponents = powers.map{|i| (0..i).to_a}
+    divisors = exponents.shift.product(*exponents).map do |powers|
+      primes.zip(powers).map{|prime, power| prime ** power}.inject(:*)
+    end
+    divisors.sort
+  end
 end
 
 class Array
