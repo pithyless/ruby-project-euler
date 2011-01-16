@@ -35,6 +35,17 @@ class Array
   def sum
     self.inject (0) { |total, e| total + e }
   end
+  
+  def permutations
+    n = self.length
+    return [self] if n < 2
+
+    self.inject([]) { |perm,i| perm + _perm(n-1,[i], self-[i]) }
+  end
+  def _perm(n, start, rem)
+    return rem.inject([]) { |perm,i| perm << (start+[i]) && perm } if n == 1
+    return rem.inject([]) { |perm,i| perm + _perm(n-1,(start+[i]),rem-[i]) }
+  end
 
   def each_permutation(&blockproc)
     a = []
