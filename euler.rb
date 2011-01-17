@@ -1,4 +1,4 @@
-require 'prime'
+# require 'prime'
 
 class String
   def palindrome?
@@ -7,10 +7,6 @@ class String
 end
 
 class Integer
-  def digits
-    self.to_s.split(//).map { |x| x.to_i }
-  end
-  
   def factorial
     x = self
     (self-1).downto(2) { |i| x *= i}
@@ -73,5 +69,72 @@ class Array
         i = i + 1
       end
     end
+  end
+end
+
+
+class Fixnum
+  def digits
+    self.to_s.split(//).map{ |c| c.to_i }
+  end
+  
+  def nth_prime
+    return [2,3,5,7,11,13,17,19][self-1] if self < 9
+    k = 8
+    p = 19
+    while k < self
+      p += 2
+      while not p.prime?
+        p += 2
+      end
+      k += 1
+    end
+    p
+  end
+  
+  def prime?
+    sp = _silly_prime?
+    return sp unless sp.nil?
+    
+    sqrt = self ** 0.5
+    primes = Sieve.get_primes_to sqrt
+    primes.each do |t|
+      return true if t > sqrt
+      return false if 0 == self % t
+    end
+    
+    return true
+  end
+  
+  def _silly_prime?
+    return [2,3,5,7,11,13,17,19].member?(self) if self < 20
+    
+    ds = self.digits
+    # 2s and 5s
+    return false if [0,2,4,5,6,8].member?(ds[-1])
+    # 3s
+    return false if 0 == ds.sum % 3
+    
+    return nil
+  end
+end
+
+class Sieve
+  def self.get_primes_to max
+    series = (2..max).to_a
+    sqrt  = max**0.5
+
+    0.upto series.length do |k|
+      next unless series[k]
+
+      candidate = series[k]
+      wipe = (candidate**2)-2
+      while wipe <= max
+        series[wipe] = nil
+        wipe += candidate
+      end
+    end
+
+    series.compact
   end
 end
