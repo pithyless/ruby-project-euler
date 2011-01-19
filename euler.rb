@@ -32,6 +32,10 @@ class Array
     self.inject (0) { |total, e| total + e }
   end
   
+  def product
+    self.inject (1) { |t, e| t * e }
+  end
+  
   def permutations
     n = self.length
     return [self] if n < 2
