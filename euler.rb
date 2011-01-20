@@ -41,6 +41,7 @@ class Integer
   end
 
   def divisors
+    return [1] if self < 2
     primes, powers = self.prime_division.transpose
     exponents = powers.map{|i| (0..i).to_a}
     divisors = exponents.shift.product(*exponents).map do |powers|
