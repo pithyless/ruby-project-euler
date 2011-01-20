@@ -1,4 +1,4 @@
-# require 'prime'
+require 'prime'
 
 class String
   def palindrome?
@@ -7,7 +7,30 @@ class String
 end
 
 class Integer
+  def digits
+    self.to_s.split(//).map{ |c| c.to_i }
+  end
+  
+  def sum_of_divisors
+    n = self.to_i
+    divisors = [1]
+    2.upto(n**0.5) do |i|
+      if 0 == n%i
+        divisors << i
+        divisors << n/i unless n/i == i
+      end
+    end
+
+    divisors.inject(0){|sum,i| sum += i}
+  end
+  
+  def abundant?
+    sum_of_divisors > self.to_i
+  end
+  
   def factorial
+    return 1 if x < 2
+    return 2 if x == 2
     x = self
     (self-1).downto(2) { |i| x *= i}
     x
@@ -21,20 +44,20 @@ class Integer
     primes, powers = self.prime_division.transpose
     exponents = powers.map{|i| (0..i).to_a}
     divisors = exponents.shift.product(*exponents).map do |powers|
-      primes.zip(powers).map{|prime, power| prime ** power}.inject(:*)
+      primes.zip(powers).map{|prime, power| prime ** power}.inject(&:*)
     end
     divisors.sort
   end
-end
+  end
 
 class Array
   def sum
-    self.inject (0) { |total, e| total + e }
+    self.inject(0) { |total, e| total + e }
   end
   
-  def product
-    self.inject (1) { |t, e| t * e }
-  end
+  # def product
+  #   self.inject(1) { |t, e| t * e }
+  # end
   
   def permutations
     n = self.length
@@ -77,11 +100,7 @@ class Array
 end
 
 
-class Fixnum
-  def digits
-    self.to_s.split(//).map{ |c| c.to_i }
-  end
-  
+class Fixnum  
   def nth_prime
     return [2,3,5,7,11,13,17,19][self-1] if self < 9
     k = 8
