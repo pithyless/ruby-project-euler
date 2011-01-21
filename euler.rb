@@ -7,8 +7,17 @@ class String
 end
 
 class Integer
+  @@factorials = {}
+
   def digits
     self.to_s.split(//).map{ |c| c.to_i }
+  end
+  
+  def factorial
+    return @@factorials[self] if @@factorials.include?(self)
+    total = 1
+    self.downto(1) { |i| total *= i }
+    @@factorials[self] = total
   end
   
   def sum_of_divisors
@@ -27,15 +36,7 @@ class Integer
   def abundant?
     sum_of_divisors > self.to_i
   end
-  
-  def factorial
-    return 1 if x < 2
-    return 2 if x == 2
-    x = self
-    (self-1).downto(2) { |i| x *= i}
-    x
-  end
-  
+
   def pandigital?(n = 9)
     self.digits.sort ==  (1..n).to_a
   end
